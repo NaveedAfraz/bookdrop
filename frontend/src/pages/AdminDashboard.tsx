@@ -8,10 +8,10 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import api from '../lib/api';
 import { toast } from 'react-hot-toast';
 
-type Tab = 'stats' | 'books' | 'users' | 'orders' | 'challenges' | 'bundles' | 'marketplace' | 'rooms' | 'refunds';
+type Tab = 'stats' | 'books' | 'users' | 'orders' | 'challenges' | 'bundles' | 'marketplace' | /* 'rooms' | */ 'refunds';
 
-const emptyBook = { title: '', author: '', description: '', price: '', stock: '', cover_image: '', category: '', country: '', published_year: '' };
-const emptyChallenge = { title: '', description: '', book_count: '', duration_days: '', reward_points: '' };
+const emptyBook = { title: '', author: '', description: '', price: '', stock: '', cover_image: '', category: '', country: '', published_year: '', product_type: 'First-Hand', condition_desc: 'Good', seller_city: 'Bookdrop HQ' };
+const emptyChallenge = { title: '', description: '', book_count: '', duration_days: '', reward_points: '', target_category: '' };
 const emptyBundle = { title: '', description: '', discount_percent: '' };
 
 const TABS = [
@@ -22,7 +22,7 @@ const TABS = [
     { key: 'challenges',  label: 'Challenges',    icon: <Trophy size={16}/> },
     { key: 'bundles',     label: 'Bundles',       icon: <Package size={16}/> },
     { key: 'marketplace', label: 'Marketplace',   icon: <Mic2 size={16}/> },
-    { key: 'rooms',       label: 'Rooms',         icon: <Users size={16}/> },
+    // { key: 'rooms',    label: 'Rooms',         icon: <Users size={16}/> }, // Uncomment when Socket.io chat is implemented
     { key: 'refunds',     label: 'Refunds',       icon: <RefreshCcw size={16}/> },
 ];
 
@@ -67,7 +67,7 @@ const AdminDashboard: React.FC = () => {
         challenges: '/api/admin/challenges',
         bundles: '/api/admin/bundles',
         marketplace: '/api/admin/marketplace',
-        rooms: '/api/admin/rooms',
+        // rooms: '/api/admin/rooms', // Uncomment when Socket.io chat is implemented
         refunds: '/api/admin/refunds',
     };
 
@@ -89,7 +89,7 @@ const AdminDashboard: React.FC = () => {
     };
     const openCreate = () => {
         setEditing(null);
-        const defaults: Record<Tab, any> = { stats: {}, books: emptyBook, users: {}, orders: {}, challenges: emptyChallenge, bundles: emptyBundle, marketplace: {}, rooms: {}, refunds: {} };
+        const defaults: Record<Tab, any> = { stats: {}, books: emptyBook, users: {}, orders: {}, challenges: emptyChallenge, bundles: emptyBundle, marketplace: {}, /* rooms: {}, */ refunds: {} };
         setForm({ ...defaults[activeTab] });
         setShowForm(true);
     };
@@ -98,16 +98,15 @@ const AdminDashboard: React.FC = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            const adminEndpoints: Record<string, string> = { users: '/api/admin/users', orders: '/api/admin/orders', challenges: '/api/admin/challenges', bundles: '/api/admin/bundles', marketplace: '/api/admin/marketplace', rooms: '/api/admin/rooms' };
-            const base = adminEndpoints[activeTab] || endpointMap[activeTab];
-
-            if (editing) {
-                await api.put(`${base}/${editing.id}`, form);
-                toast.success('Updated successfully');
+            let res;
+            if (activeTab === 'books' && form.product_type === 'Second-Hand' && !editing) {
+                res = await api.post('/api/admin/marketplace', form);
             } else {
-                await api.post(base, form);
-                toast.success('Created successfully');
+                res = editing 
+                    ? await api.put(`/api/admin/${activeTab}/${editing.id}`, form)
+                    : await api.post(`/api/admin/${activeTab}`, form);
             }
+            toast.success(editing ? 'Updated successfully' : 'Created successfully');
             setShowForm(false);
             setEditing(null);
             fetchData();
@@ -159,12 +158,22 @@ const AdminDashboard: React.FC = () => {
                         <h1 className="text-2xl font-heading italic text-text capitalize">{activeTab}</h1>
                         <p className="text-subtext text-xs">Manage your {activeTab} data</p>
                     </div>
-                    {canCreate && (
-                        <button onClick={openCreate} className="bg-secondary text-primary px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 hover:shadow-lg hover:shadow-secondary/20 transition-all">
-                            <Plus size={14}/> Add {activeTab.slice(0, -1)}
+                    <div className="flex items-center gap-4">
+                    {['books', 'challenges', 'bundles', 'marketplace'].includes(activeTab) && (
+                        <button 
+                            onClick={() => { 
+                                setEditing(null); 
+                                setForm(activeTab === 'marketplace' ? { ...emptyBook, product_type: 'Second-Hand' } : (activeTab === 'books' ? emptyBook : (activeTab === 'challenges' ? emptyChallenge : emptyBundle))); 
+                                if (activeTab === 'marketplace') setActiveTab('books'); // Route marketplace creation through consolidated book form
+                                setShowForm(true); 
+                            }} 
+                            className="bg-secondary text-primary px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-secondary/20 transition-all"
+                        >
+                            <Plus size={16}/> New {activeTab === 'marketplace' ? 'Listing' : activeTab.slice(0,-1)}
                         </button>
                     )}
                 </div>
+            </div>
 
                 {loading ? (
                     <div className="h-80 flex items-center justify-center"><Loader2 className="animate-spin text-secondary" size={28}/></div>
@@ -304,14 +313,14 @@ const AdminDashboard: React.FC = () => {
                     )}
 
                     {/* ── ROOMS ── */}
-                    {activeTab === 'rooms' && Array.isArray(data) && (
+                    {/* {activeTab === 'rooms' && Array.isArray(data) && (
                         <Table columns={['Book','Creator','Code','Members']} rows={data} renderRow={(r:any) => [
                             <span className="font-bold text-text text-sm">{r.book_title}</span>,
                             <span className="text-subtext text-xs">{r.creator_name}</span>,
                             <span className="font-mono text-secondary text-xs font-bold bg-secondary/10 px-2 py-0.5 rounded">{r.invite_code}</span>,
                             <span className="text-subtext text-sm">{r.member_count}</span>,
                         ]} onDelete={canDelete ? handleDelete : undefined}/>
-                    )}
+                    )} */}
 
                     {/* ── REFUNDS ── */}
                     {activeTab === 'refunds' && Array.isArray(data) && (
@@ -355,14 +364,37 @@ const AdminDashboard: React.FC = () => {
                         <form onSubmit={handleSave} className="space-y-4">
                             {/* BOOKS */}
                             {activeTab === 'books' && <>
+                                <div className="bg-surface p-1 rounded-xl flex gap-1 mb-4 border border-border">
+                                    {['First-Hand', 'Second-Hand'].map(type => (
+                                        <button 
+                                            key={type}
+                                            type="button"
+                                            onClick={() => setForm({...form, product_type: type})}
+                                            className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${form.product_type === type ? 'bg-secondary text-primary shadow-sm' : 'text-subtext hover:bg-white/5'}`}
+                                        >
+                                            {type}
+                                        </button>
+                                    ))}
+                                </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <Field label="Title"><input required className={inputCls} value={form.title||''} onChange={e=>setForm({...form,title:e.target.value})} placeholder="Title"/></Field>
                                     <Field label="Author"><input required className={inputCls} value={form.author||''} onChange={e=>setForm({...form,author:e.target.value})} placeholder="Author"/></Field>
                                     <Field label="Category"><input required className={inputCls} value={form.category||''} onChange={e=>setForm({...form,category:e.target.value})}/></Field>
-                                    <Field label="Country"><input className={inputCls} value={form.country||''} onChange={e=>setForm({...form,country:e.target.value})}/></Field>
                                     <Field label="Price (₹)"><input required type="number" className={inputCls} value={form.price||''} onChange={e=>setForm({...form,price:e.target.value})}/></Field>
-                                    <Field label="Stock"><input required type="number" className={inputCls} value={form.stock||''} onChange={e=>setForm({...form,stock:e.target.value})}/></Field>
-                                    <Field label="Published Year"><input type="number" className={inputCls} value={form.published_year||''} onChange={e=>setForm({...form,published_year:e.target.value})}/></Field>
+                                    
+                                    {form.product_type === 'First-Hand' ? (
+                                        <Field label="Stock"><input required type="number" className={inputCls} value={form.stock||'0'} onChange={e=>setForm({...form,stock:e.target.value})}/></Field>
+                                    ) : (
+                                        <Field label="Condition">
+                                            <select className={inputCls} value={form.condition_desc||'Good'} onChange={e=>setForm({...form,condition_desc:e.target.value})}>
+                                                {['Good','Fair','Worn'].map(c=><option key={c}>{c}</option>)}
+                                            </select>
+                                        </Field>
+                                    )}
+
+                                    {form.product_type === 'Second-Hand' && (
+                                        <Field label="Seller City"><input className={inputCls} value={form.seller_city||''} onChange={e=>setForm({...form,seller_city:e.target.value})}/></Field>
+                                    )}
                                     <Field label="Cover URL"><input className={inputCls} value={form.cover_image||''} onChange={e=>setForm({...form,cover_image:e.target.value})} placeholder="https://..."/></Field>
                                 </div>
                                 <Field label="Description"><textarea className={`${inputCls} h-24 resize-none`} value={form.description||''} onChange={e=>setForm({...form,description:e.target.value})}/></Field>
@@ -398,10 +430,11 @@ const AdminDashboard: React.FC = () => {
                             {activeTab === 'challenges' && <>
                                 <Field label="Title"><input required className={inputCls} value={form.title||''} onChange={e=>setForm({...form,title:e.target.value})}/></Field>
                                 <Field label="Description"><textarea className={`${inputCls} h-20 resize-none`} value={form.description||''} onChange={e=>setForm({...form,description:e.target.value})}/></Field>
-                                <div className="grid grid-cols-3 gap-4">
+                                <div className="grid grid-cols-2 gap-4">
                                     <Field label="Books Required"><input required type="number" className={inputCls} value={form.book_count||''} onChange={e=>setForm({...form,book_count:e.target.value})}/></Field>
-                                    <Field label="Days"><input required type="number" className={inputCls} value={form.duration_days||''} onChange={e=>setForm({...form,duration_days:e.target.value})}/></Field>
-                                    <Field label="Reward Points"><input required type="number" className={inputCls} value={form.reward_points||''} onChange={e=>setForm({...form,reward_points:e.target.value})}/></Field>
+                                    <Field label="Duration (Days)"><input required type="number" className={inputCls} value={form.duration_days||''} onChange={e=>setForm({...form,duration_days:e.target.value})}/></Field>
+                                    <Field label="Reward (Points)"><input required type="number" className={inputCls} value={form.reward_points||''} onChange={e=>setForm({...form,reward_points:e.target.value})}/></Field>
+                                    <Field label="Target Category"><input className={inputCls} value={form.target_category||''} onChange={e=>setForm({...form,target_category:e.target.value})} placeholder="e.g. Sci-Fi"/></Field>
                                 </div>
                             </>}
 

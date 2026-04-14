@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, Compass, Sparkles, Map, History, ShieldCheck, Menu, X } from 'lucide-react';
+import { ShoppingBag, User, Compass, Sparkles, Map, History, ShieldCheck, Menu, X, Heart, Package } from 'lucide-react';
 import CartDrawer from './CartDrawer';
 import { useAuth } from '../context/AuthContext';
 
@@ -16,7 +16,9 @@ const Navbar: React.FC = () => {
     };
 
     const navLinks = [
+        { to: '/books', label: 'Shop', icon: <ShoppingBag size={14}/> },
         { to: '/marketplace', label: 'Marketplace' },
+        { to: '/bundles', label: 'Bundles', icon: <Package size={14}/> },
         { to: '/map', label: 'Atlas', icon: <Map size={14}/> },
         { to: '/time-machine', label: 'Eras', icon: <History size={14}/> },
         { to: '/discover', label: 'Swipe', icon: <Compass size={14}/> },
@@ -55,13 +57,24 @@ const Navbar: React.FC = () => {
 
                 <div className="flex items-center gap-3">
                     {isAuthenticated && (
-                        <button 
-                            onClick={() => setIsCartOpen(true)} 
-                            className="relative p-2.5 rounded-xl text-subtext hover:text-text hover:bg-surface/50 transition-all group"
-                        >
-                            <ShoppingBag size={20} className="group-hover:scale-110 transition-transform"/>
-                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-secondary rounded-full ring-2 ring-bg"></span>
-                        </button>
+                        <div className="flex items-center gap-1">
+                            <Link 
+                                to="/wishlist" 
+                                className="p-2.5 rounded-xl text-subtext hover:text-accent hover:bg-surface/50 transition-all group"
+                                title="Wishlist"
+                            >
+                                <Heart size={20} className="group-hover:scale-110 transition-transform"/>
+                            </Link>
+
+                            <button 
+                                onClick={() => setIsCartOpen(true)} 
+                                className="relative p-2.5 rounded-xl text-subtext hover:text-text hover:bg-surface/50 transition-all group"
+                                title="Bag"
+                            >
+                                <ShoppingBag size={20} className="group-hover:scale-110 transition-transform"/>
+                                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-secondary rounded-full ring-2 ring-bg"></span>
+                            </button>
+                        </div>
                     )}
                     
                     {isAuthenticated && user ? (

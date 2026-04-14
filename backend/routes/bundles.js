@@ -23,9 +23,7 @@ router.get('/', async (req, res) => {
 
         // Mock data if none exists
         if (bundles.length === 0) {
-             return res.json([
-                  { id: 1, title: 'Sci-Fi Starter Pack', description: 'The best of the galaxy.', discount_percent: 20, original_price: 45.00, discounted_price: 36.00, books: [] }
-             ]);
+             return res.json([]);
         }
 
         res.json(bundles);

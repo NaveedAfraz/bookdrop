@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Loader2, Sparkles, Wand2 } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Loader2, Sparkles, Wand2, Eye, EyeOff } from 'lucide-react';
 import api from '../lib/api';
 import { toast } from 'react-hot-toast';
 
@@ -9,6 +9,7 @@ const Register: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleRegister = async (e: React.FormEvent) => {
@@ -81,12 +82,19 @@ const Register: React.FC = () => {
                             <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-subtext/50 group-focus-within/input:text-secondary transition-colors"/>
                             <input 
                                 required 
-                                type="password" 
-                                className="w-full bg-surface border border-border rounded-xl pl-11 pr-4 py-4 text-sm text-text focus:outline-none focus:border-secondary/40 transition-colors placeholder:text-subtext/30" 
+                                type={showPassword ? "text" : "password"} 
+                                className="w-full bg-surface border border-border rounded-xl pl-11 pr-12 py-4 text-sm text-text focus:outline-none focus:border-secondary/40 transition-colors placeholder:text-subtext/30" 
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-subtext/50 hover:text-secondary transition-colors focus:outline-none"
+                            >
+                                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
                         </div>
                     </div>
 

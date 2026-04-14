@@ -136,8 +136,8 @@ const BundlesPage: React.FC = () => {
                              <p className="text-subtext mb-8 flex-1 text-sm leading-relaxed italic">"{bundle.description}"</p>
                              
                              <div className="mb-6 flex items-end gap-3">
-                                  <span className="text-3xl font-bold text-text">${parseFloat(bundle.discounted_price).toFixed(2)}</span>
-                                  <span className="text-subtext/50 line-through text-lg pb-1">${parseFloat(bundle.original_price).toFixed(2)}</span>
+                                  <span className="text-3xl font-bold text-text">₹{parseFloat(bundle.discounted_price).toFixed(0)}</span>
+                                  <span className="text-subtext/50 line-through text-lg pb-1">₹{parseFloat(bundle.original_price).toFixed(0)}</span>
                              </div>
 
                              <button onClick={() => addEntireBundle(bundle)} className="w-full bg-secondary text-primary py-3.5 rounded-xl font-bold text-sm flex justify-center items-center gap-2 hover:glow-green transition-all">

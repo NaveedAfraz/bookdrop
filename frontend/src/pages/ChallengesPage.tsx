@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Target, Award, CheckCircle, Loader2 } from 'lucide-react';
 import api from '../lib/api';
 import { toast } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const ChallengesPage: React.FC = () => {
     const [challenges, setChallenges] = useState<any[]>([]);
@@ -76,7 +77,15 @@ const ChallengesPage: React.FC = () => {
                                 </div>
                                 <div>
                                     <h2 className="text-xl font-heading italic text-text">{challenge.title}</h2>
-                                    <p className="text-xs font-bold text-secondary">+{challenge.reward_points} pts</p>
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-xs font-bold text-secondary">+{challenge.reward_points} pts</p>
+                                        {challenge.target_category && (
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[9px] font-bold bg-secondary/5 border border-secondary/20 px-1.5 py-0.5 rounded text-secondary uppercase tracking-tighter">Target: {challenge.target_category}</span>
+                                                <Link to="/books" className="text-[9px] font-bold text-subtext/60 hover:text-secondary hover:underline transition-all">Explore Collection →</Link>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -92,8 +101,19 @@ const ChallengesPage: React.FC = () => {
                                         <div className={`h-full transition-all duration-1000 rounded-full ${isCompleted ? 'bg-secondary' : 'bg-accent'}`} style={{ width: `${Math.min(progress, 100)}%` }}></div>
                                     </div>
 
+                                    {!isCompleted && (
+                                        <div className="bg-secondary/5 border border-secondary/20 rounded-xl p-3 mb-4">
+                                            <p className="text-[10px] font-bold text-secondary uppercase tracking-[0.1em] mb-1">Quest Requirement:</p>
+                                            <p className="text-xs text-text leading-relaxed">
+                                                Purchase <span className="font-bold text-secondary">{challenge.book_count - booksRead}</span> more 
+                                                <span className="font-bold"> {challenge.target_category || 'standard'}</span> books 
+                                                from the <Link to="/books" className="underline hover:text-secondary italic">Shop</Link> to win your reward.
+                                            </p>
+                                        </div>
+                                    )}
+
                                     {canComplete && (
-                                        <button onClick={() => handleComplete(challenge.id)} className="w-full bg-secondary text-primary py-3 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-secondary/20 transition-all">
+                                        <button onClick={() => handleComplete(challenge.id)} className="w-full bg-secondary text-primary py-3 rounded-xl font-bold text-sm hover:glow-green transition-all shadow-lg hover:shadow-secondary/20">
                                             Claim {challenge.reward_points} Points
                                         </button>
                                     )}

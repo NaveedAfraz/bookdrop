@@ -15,10 +15,7 @@ router.get('/', authMiddleware, async (req, res) => {
         
         // Mock active challenges if empty for demo purposes
         if (challenges.length === 0) {
-            return res.json([
-                 { id: 1, title: 'Read 5 Sci-Fi Books', description: 'Explore the galaxy.', book_count: 5, reward_points: 500, is_joined: false, books_read: 0 },
-                 { id: 2, title: 'Mystery Month', description: 'Solve 3 thrillers.', book_count: 3, reward_points: 300, is_joined: true, books_read: 2 }
-            ]);
+            return res.json([]);
         }
         res.json(challenges);
     } catch (error) {

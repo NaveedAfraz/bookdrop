@@ -8,6 +8,7 @@ const BookListing: React.FC = () => {
   const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -32,10 +33,14 @@ const BookListing: React.FC = () => {
     }
   };
 
-  const filtered = books.filter(b =>
-    b.title?.toLowerCase().includes(search.toLowerCase()) ||
-    b.author?.toLowerCase().includes(search.toLowerCase())
-  );
+  const categories = ['All', ...Array.from(new Set(books.map(b => b.category))).filter(Boolean)];
+
+  const filtered = books.filter(b => {
+    const matchesSearch = b.title?.toLowerCase().includes(search.toLowerCase()) ||
+                          b.author?.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || b.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="container mx-auto px-6 py-12">
@@ -45,14 +50,31 @@ const BookListing: React.FC = () => {
           <div className="text-xs font-bold text-secondary uppercase tracking-[0.2em] mb-2">Collection</div>
           <h1 className="text-4xl font-heading italic text-text">All Books</h1>
         </div>
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative flex-1 md:w-72">
+        <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+          {/* Category Pill Filters */}
+          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar max-w-full md:max-w-md">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-full text-[10px] font-bold transition-all whitespace-nowrap border uppercase tracking-widest ${
+                  selectedCategory === cat 
+                  ? 'bg-secondary text-primary border-secondary' 
+                  : 'bg-surface text-subtext/60 border-border hover:border-secondary/30'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="relative w-full md:w-72">
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-subtext" />
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search titles or authors..."
+              placeholder="Search..."
               className="w-full bg-surface border border-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-text placeholder:text-subtext/50 focus:outline-none focus:border-secondary/40 transition-colors"
             />
           </div>
@@ -89,8 +111,8 @@ const BookListing: React.FC = () => {
                 <h3 className="font-heading italic text-lg text-text truncate">{book.title}</h3>
                 <p className="text-xs text-subtext mb-4">{book.author}</p>
                 <div className="mt-auto flex justify-between items-center pt-3 border-t border-border/50">
-                  <span className="font-bold text-lg text-secondary">₹{parseFloat(book.price).toFixed(2)}</span>
-                  <Link to={`/books/${book.id}`} className="text-subtext hover:text-secondary text-xs font-bold transition-colors">Details →</Link>
+                    <span className="font-bold text-lg text-secondary">₹{parseFloat(book.price).toFixed(0)}</span>
+                    <Link to={`/books/${book.id}`} className="text-subtext hover:text-secondary text-xs font-bold transition-colors">Details →</Link>
                 </div>
               </div>
             </div>

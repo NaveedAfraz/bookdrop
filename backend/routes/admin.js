@@ -89,15 +89,15 @@ router.get('/challenges', ...auth, async (req, res) => {
 });
 router.post('/challenges', ...auth, async (req, res) => {
     try {
-        const { title, description, book_count, duration_days, reward_points } = req.body;
-        const [r] = await pool.query('INSERT INTO challenges (title, description, book_count, duration_days, reward_points) VALUES (?,?,?,?,?)', [title, description, book_count, duration_days, reward_points]);
+        const { title, description, book_count, duration_days, reward_points, target_category } = req.body;
+        const [r] = await pool.query('INSERT INTO challenges (title, description, book_count, duration_days, reward_points, target_category) VALUES (?,?,?,?,?,?)', [title, description, book_count, duration_days, reward_points, target_category || null]);
         res.status(201).json({ id: r.insertId, message: 'Challenge created' });
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 router.put('/challenges/:id', ...auth, async (req, res) => {
     try {
-        const { title, description, book_count, duration_days, reward_points } = req.body;
-        await pool.query('UPDATE challenges SET title=?, description=?, book_count=?, duration_days=?, reward_points=? WHERE id=?', [title, description, book_count, duration_days, reward_points, req.params.id]);
+        const { title, description, book_count, duration_days, reward_points, target_category } = req.body;
+        await pool.query('UPDATE challenges SET title=?, description=?, book_count=?, duration_days=?, reward_points=?, target_category=? WHERE id=?', [title, description, book_count, duration_days, reward_points, target_category || null, req.params.id]);
         res.json({ message: 'Challenge updated' });
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -148,6 +148,37 @@ router.get('/marketplace', ...auth, async (req, res) => {
         `);
         res.json(rows);
     } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+router.post('/marketplace', ...auth, async (req, res) => {
+    try {
+        const { title, author, price, condition_desc, seller_city, category, cover_image, description } = req.body;
+        
+        // 1. Find or Create Book Identity
+        let bookId;
+        const [existing] = await pool.query('SELECT id FROM books WHERE title = ? AND author = ?', [title, author]);
+        
+        if (existing.length > 0) {
+            bookId = existing[0].id;
+        } else {
+            const [newBook] = await pool.query(
+                'INSERT INTO books (title, author, category, description, cover_image, price, stock) VALUES (?, ?, ?, ?, ?, ?, 0)',
+                [title, author, category || 'Other', description || '', cover_image || '', price, 0]
+            );
+            bookId = newBook.insertId;
+        }
+
+        // 2. Create Second-Hand Listing (Seller is the Admin)
+        const [r] = await pool.query(
+            'INSERT INTO second_hand_books (book_id, seller_id, price, condition_desc, seller_city, status) VALUES (?, ?, ?, ?, ?, "AVAILABLE")',
+            [bookId, req.user.id, price, condition_desc || 'Good', seller_city || 'Bookdrop HQ', 'AVAILABLE']
+        );
+
+        res.status(201).json({ id: r.insertId, message: 'Marketplace listing created' });
+    } catch (e) { 
+        console.error(e);
+        res.status(500).json({ error: e.message }); 
+    }
 });
 router.put('/marketplace/:id', ...auth, async (req, res) => {
     try {

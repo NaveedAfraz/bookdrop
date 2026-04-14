@@ -81,12 +81,15 @@ router.post('/place', authMiddleware, async (req, res) => {
                 await connection.query('UPDATE books SET stock = stock - ? WHERE id = ?', [item.quantity, item.book_id]);
                 
                 // Challenge Progress Increment
-                // We check if this book belongs to any active challenge the user joined
+                // Only increment for challenges with a matching target_category, or if target_category is NULL (General)
                 await connection.query(`
-                    UPDATE user_challenges 
-                    SET books_read = books_read + ? 
-                    WHERE user_id = ? AND completed_at IS NULL
-                `, [item.quantity, req.user.id]);
+                    UPDATE user_challenges uc
+                    JOIN challenges c ON uc.challenge_id = c.id
+                    SET uc.books_read = uc.books_read + ? 
+                    WHERE uc.user_id = ? 
+                      AND uc.completed_at IS NULL
+                      AND (c.target_category IS NULL OR c.target_category = (SELECT category FROM books WHERE id = ?))
+                `, [item.quantity, req.user.id, item.book_id]);
             }
         }
 

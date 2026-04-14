@@ -55,7 +55,7 @@ router.get('/:roomId/messages', authMiddleware, async (req, res) => {
         
         // Mock message
         if (messages.length === 0) {
-            return res.json([{ id: 1, user_name: 'System', message: 'Welcome to the Read Together room! Discuss the chapters here.', sent_at: new Date() }]);
+            return res.json([]);
         }
 
         res.json(messages);
