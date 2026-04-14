@@ -87,22 +87,16 @@ const AdminDashboard: React.FC = () => {
         setForm({ ...item });
         setShowForm(true);
     };
-    const openCreate = () => {
-        setEditing(null);
-        const defaults: Record<Tab, any> = { stats: {}, books: emptyBook, users: {}, orders: {}, challenges: emptyChallenge, bundles: emptyBundle, marketplace: {}, /* rooms: {}, */ refunds: {} };
-        setForm({ ...defaults[activeTab] });
-        setShowForm(true);
-    };
+
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
         try {
-            let res;
             if (activeTab === 'books' && form.product_type === 'Second-Hand' && !editing) {
-                res = await api.post('/api/admin/marketplace', form);
+                await api.post('/api/admin/marketplace', form);
             } else {
-                res = editing 
+                editing 
                     ? await api.put(`/api/admin/${activeTab}/${editing.id}`, form)
                     : await api.post(`/api/admin/${activeTab}`, form);
             }
@@ -125,7 +119,7 @@ const AdminDashboard: React.FC = () => {
         } catch { toast.error('Delete failed'); }
     };
 
-    const canCreate = ['books', 'challenges', 'bundles'].includes(activeTab);
+
     const canDelete = ['books', 'users', 'orders', 'challenges', 'bundles', 'marketplace', 'rooms'].includes(activeTab);
     const canEdit   = ['books', 'users', 'orders', 'challenges', 'bundles', 'marketplace'].includes(activeTab);
 
