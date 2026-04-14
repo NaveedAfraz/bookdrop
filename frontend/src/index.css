@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ═══ MIDNIGHT AURORA — Dark Premium Palette ═══ */
+  --color-primary: #0A0F1C;
+  --color-secondary: #00E5A0;
+  --color-bg: #060B14;
+  --color-card: #0D1424;
+  --color-text: #E8ECF4;
+  --color-subtext: #6B7A99;
+  --color-accent: #3B82F6;
+  --color-success: #00E5A0;
+  --color-error: #FF4D6A;
+  --color-surface: #111B2E;
+  --color-border: #1A2744;
+  --color-glow: #00E5A0;
+  --color-glow-blue: #3B82F6;
+
+  --font-heading: "Instrument Serif", serif;
+  --font-body: "Space Grotesk", sans-serif;
+}
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #1A2744 transparent;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-text);
+  }
+
+  ::selection {
+    background: rgba(0, 229, 160, 0.25);
+    color: #E8ECF4;
+  }
+}
+
+@layer utilities {
+  /* ═══ Glow & Glass Effects ═══ */
+  .glass {
+    background: rgba(13, 20, 36, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(26, 39, 68, 0.6);
+  }
+
+  .glass-light {
+    background: rgba(13, 20, 36, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(26, 39, 68, 0.4);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 40px rgba(0, 229, 160, 0.12), 0 0 80px rgba(0, 229, 160, 0.06);
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.12), 0 0 80px rgba(59, 130, 246, 0.06);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(0, 229, 160, 0.5), 0 0 60px rgba(0, 229, 160, 0.2);
+  }
+
+  .text-glow-blue {
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 60px rgba(59, 130, 246, 0.2);
+  }
+
+  /* ═══ Noise Grain Overlay ═══ */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    border-radius: inherit;
+  }
+
+  /* ═══ Swipe Animations ═══ */
+  .animate-swipe-right {
+    animation: swipeRight 0.5s ease-out forwards;
+  }
+  .animate-swipe-left {
+    animation: swipeLeft 0.5s ease-out forwards;
+  }
+
+  /* ═══ Skeleton ═══ */
+  .skeleton {
+    animation: skeleton-loading 1.2s ease-in-out infinite alternate;
+  }
+
+  /* ═══ Mesh Gradient Backgrounds ═══ */
+  .mesh-hero {
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(0, 229, 160, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+  }
+
+  .mesh-card {
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(0, 229, 160, 0.04) 0%, transparent 50%),
+      var(--color-card);
+  }
+
+  /* ═══ Divider Lines ═══ */
+  .divider-glow {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-secondary), transparent);
+    opacity: 0.2;
+  }
+
+  /* Custom scrollbar (WebKit) */
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #1A2744; border-radius: 10px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #253A5C; }
+}
+
+@keyframes swipeRight {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(200%, 50px) rotate(30deg); opacity: 0; }
+}
+
+@keyframes swipeLeft {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-200%, 50px) rotate(-30deg); opacity: 0; }
+}
+
+@keyframes skeleton-loading {
+  0% { background-color: rgba(26, 39, 68, 0.3); }
+  100% { background-color: rgba(26, 39, 68, 0.7); }
+}
