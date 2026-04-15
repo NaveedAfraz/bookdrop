@@ -39,4 +39,22 @@ router.post('/sell', authMiddleware, async (req, res) => {
     }
 });
 
+// Get second hand listings for a specific book
+router.get('/book/:bookId', async (req, res) => {
+    try {
+        const [books] = await pool.query(`
+            SELECT sh.*, u.name as seller_name,
+            (SELECT city FROM addresses a WHERE a.user_id = sh.seller_id LIMIT 1) as seller_city
+            FROM second_hand_books sh
+            JOIN users u ON sh.seller_id = u.id
+            WHERE sh.book_id = ? AND sh.status = 'AVAILABLE'
+            ORDER BY sh.created_at DESC
+        `, [req.params.bookId]);
+        res.json(books);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 module.exports = router;

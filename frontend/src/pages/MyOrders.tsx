@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, RefreshCw, PlayCircle, Loader2, X } from 'lucide-react';
+import { Package, RefreshCw, PlayCircle, Loader2, X, History } from 'lucide-react';
 import api from '../lib/api';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
@@ -85,6 +85,11 @@ const MyOrders: React.FC = () => {
                                             <button onClick={() => setRefundModal({ isOpen: true, orderId: order.id, bookId: item.book_id, bookTitle: item.title })} className="px-3 py-1.5 bg-surface border border-border text-subtext rounded-lg text-[10px] font-bold flex items-center gap-1 hover:border-error/30 hover:text-error transition-all">
                                                 <RefreshCw size={12}/> Return
                                             </button>
+                                            {item.is_second_hand && (
+                                                <Link to={`/journey/${item.sh_book_id}`} className="px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-indigo-500/20 transition-all">
+                                                    <History size={12}/> View Journey
+                                                </Link>
+                                            )}
                                         </div>
                                     </div>
                                 ))}

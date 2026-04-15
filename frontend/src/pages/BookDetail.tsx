@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingBag, Heart, BookOpen, Star, User, Loader2, Send } from 'lucide-react';
+import { ShoppingBag, Heart, BookOpen, Star, User, Loader2, Send, Tag, MapPin, History } from 'lucide-react';
 import api from '../lib/api';
 import { toast } from 'react-hot-toast';
 
@@ -13,24 +13,31 @@ const BookDetail: React.FC = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [reviewForm, setReviewForm] = useState({ rating: 5, text: '', name: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [shBooks, setShBooks] = useState<any[]>([]);
 
   useEffect(() => { fetchBookData(); }, [id]);
 
   const fetchBookData = async () => {
     setLoading(true);
     try {
-      const [bookRes, reviewsRes] = await Promise.all([
+      const [bookRes, reviewsRes, shRes] = await Promise.all([
         api.get(`/api/books/${id}`),
-        api.get(`/api/reviews/${id}`)
+        api.get(`/api/reviews/${id}`),
+        api.get(`/api/secondHand/book/${id}`)
       ]);
       setBook(bookRes.data);
       setReviews(reviewsRes.data);
+      setShBooks(shRes.data);
     } catch { toast.error('Failed to load.'); } finally { setLoading(false); }
   };
 
-  const addToCart = async () => {
+  const addToCart = async (shBook?: any) => {
     try {
-      await api.post('/api/cart/add', { book_id: parseInt(id!), quantity });
+      if (shBook) {
+        await api.post('/api/cart/add', { bank_id: parseInt(id!), is_second_hand: true, sh_book_id: shBook.id, quantity: 1 });
+      } else {
+        await api.post('/api/cart/add', { book_id: parseInt(id!), quantity });
+      }
       toast.success('Added to bag!');
     } catch { toast.error('Sign in first.'); }
   };
@@ -108,6 +115,46 @@ const BookDetail: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Second Hand Section */}
+      {shBooks.length > 0 && (
+        <div className="mb-16">
+          <header className="flex items-center gap-3 mb-8">
+            <div className="w-1.5 h-6 bg-secondary rounded-full"></div>
+            <h2 className="text-2xl font-heading italic text-text">Pre-loved Copies</h2>
+            <span className="text-[10px] font-bold text-subtext uppercase tracking-widest bg-surface border border-border px-3 py-1 rounded-lg ml-auto">{shBooks.length} Available</span>
+          </header>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {shBooks.map(sh => (
+              <div key={sh.id} className="bg-card border border-border rounded-2xl p-6 relative group transition-all hover:border-secondary/20 hover:shadow-xl hover:shadow-secondary/5">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-secondary uppercase tracking-widest bg-secondary/10 px-2 py-0.5 rounded-md mb-2 inline-block">{sh.condition_desc}</span>
+                    <h4 className="font-bold text-text flex items-center gap-2">
+                       <User size={14} className="text-subtext"/> {sh.seller_name}
+                    </h4>
+                  </div>
+                  <div className="text-xl font-bold text-text">₹{parseFloat(sh.price).toFixed(2)}</div>
+                </div>
+
+                <div className="flex items-center gap-2 text-[10px] text-subtext font-bold uppercase tracking-widest mb-6 pb-4 border-b border-border/50">
+                   <MapPin size={12}/> {sh.seller_city || 'Global'}
+                </div>
+
+                <div className="flex gap-2">
+                   <Link to={`/journey/${sh.id}`} className="flex-1 bg-surface border border-border text-text py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:border-secondary/30 transition-all">
+                      <History size={14}/> Journey
+                   </Link>
+                   <button onClick={() => addToCart(sh)} className="flex-1 bg-secondary text-primary py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-secondary/20 transition-all">
+                      <ShoppingBag size={14}/> Buy Copy
+                   </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Reviews */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
