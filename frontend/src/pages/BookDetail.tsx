@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingBag, Heart, BookOpen, Star, User, Loader2, Send, Tag, MapPin, History } from 'lucide-react';
+import { ShoppingBag, Heart, BookOpen, Star, User, Loader2, Send, MapPin, History } from 'lucide-react';
 import api from '../lib/api';
 import { toast } from 'react-hot-toast';
 
