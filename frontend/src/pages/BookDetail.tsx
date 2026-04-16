@@ -34,7 +34,7 @@ const BookDetail: React.FC = () => {
   const addToCart = async (shBook?: any) => {
     try {
       if (shBook) {
-        await api.post('/api/cart/add', { bank_id: parseInt(id!), is_second_hand: true, sh_book_id: shBook.id, quantity: 1 });
+        await api.post('/api/cart/add', { book_id: parseInt(id!), is_second_hand: true, sh_book_id: shBook.id, quantity: 1 });
       } else {
         await api.post('/api/cart/add', { book_id: parseInt(id!), quantity });
       }

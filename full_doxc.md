@@ -1,3 +1,96 @@
+# BOOKDROP
+## A PROJECT REPORT
+Submitted in partial fulfillment of the requirements for the award of the degree of
+**BACHELOR OF COMPUTER APPLICATIONS (BCA)**
+
+**SUBMITTED BY**
+**AMAN SHAREEF**
+**H.T.NO: 280123861008**
+
+**UNDER THE GUIDANCE OF**
+**PROF. MOHAMMED ILYAS**
+**DEPARTMENT OF BCA**
+**ST. JOSEPH’S DEGREE COLLEGE**
+
+**SUBMITTED TO**
+**AFFILIATED TO OSMANIA UNIVERSITY**
+**PILLAR NO.187 UPPARPALLY ATTAPUR, HYDERABAD**
+**2023-2026**
+
+---
+
+## ST. JOSEPH’S DEGREE & P.G COLLEGE
+(Affiliated to Osmania university)
+BOSTON TOWERS, PILLAR NO. 187, UPPERPALLY,
+RAJENDRANAGAR, R.R DIST.
+
+### CERTIFICATE
+This is to certify that the project titled **"DESIGN AND IMPLEMENTATION OF A COMPREHENSIVE LITERARY SANCTUARY AND SECOND-HAND BOOK MARKETPLACE (BOOKDROP)"** is a record of original and bonafide work done by: Student Details **AMAN SHAREEF** H.T. No. **280123861008** BCA· St. Joseph's Degree College.
+
+The project is being submitted in partial fulfillment towards the requirement of the award of the degree of **Bachelor of Computer Applications (BCA)** from **Osmania University** during the period of **2023–2026**.
+
+<br><br>
+**Principal**<br>
+**Mrs. Jyothi Lakshmi**
+
+---
+
+## ST. JOSEPH’S DEGREE & P.G COLLEGE
+(Affiliated to Osmania university)
+BOSTON TOWERS, PILLAR NO. 187, UPPERPALLY,
+RAJENDRANAGAR, R.R DIST.
+
+### CERTIFICATE
+This is to certify that **AMAN SHAREEF** is a bona fide student of BCA III Year of this institution with Hall Ticket No: **280123861008** for the academic year 2023–2026. He has successfully submitted the project titled **"Design and Implementation of a Comprehensive Literary Sanctuary and Second-Hand Book Marketplace (Bookdrop)"** in partial fulfillment of the requirements for the award of the degree of Bachelor of Computer Applications (BCA).
+
+<br><br>
+**Project Guide**
+
+---
+
+## ST. JOSEPH’S DEGREE & P.G COLLEGE
+(Affiliated to Osmania university)
+BOSTON TOWERS, PILLAR NO. 187, UPPERPALLY,
+RAJENDRANAGAR, R.R DIST.
+PH. 04024018619 & 9619, 8125301483 & 86
+
+### CERTIFICATE
+This is to certify that **AMAN SHAREEF** is a bona fide student of BCA III Year of this institution with Hall Ticket No: **280123861008** for the academic year 2023–2026. He has successfully submitted the project titled **"Design and Implementation of a Comprehensive Literary Sanctuary and Second-Hand Book Marketplace (Bookdrop)"** in partial fulfillment of the requirements for the award of the degree of Bachelor of Computer Applications (BCA).
+
+<br><br>
+**External Examiner** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Internal Examiner**
+
+---
+
+## ST. JOSEPH’S DEGREE & P.G COLLEGE
+(Affiliated to Osmania university)
+BOSTON TOWERS, PILLAR NO. 187, UPPERPALLY,
+RAJENDRANAGAR, R.R DIST.
+PH. 04024018619 & 9619, 8125301483 & 86
+
+### CERTIFICATE
+This is to certify that **AMAN SHAREEF** is a bona fide student of BCA III Year of this institution with Hall Ticket No: **280123861008** for the academic year 2023–2026. He has successfully submitted the project titled **"Design and Implementation of a Comprehensive Literary Sanctuary and Second-Hand Book Marketplace (Bookdrop)"** in partial fulfillment of the requirements for the award of the degree of Bachelor of Computer Applications (BCA).
+
+<br><br>
+**HOD Signature**
+
+---
+
+### DECLARATION
+I am a student of St. Joseph Degree College, Upper Pally, Hyderabad. I do hereby declare that the project report titled **"Design and Implementation of a Comprehensive Literary Sanctuary and Second-Hand Book Marketplace (Bookdrop)"** is an original and bonafide work done by me. This is being submitted in partial fulfillment of the requirement for the award of Bachelor of Computer Applications (BCA).
+
+**AMAN SHAREEF**<br>
+**H.T.NO: 280123861008**
+
+---
+
+### ACKNOWLEDGEMENT
+I would like to express my sincere gratitude to our Principal and the Head of the Department of BCA for providing me the opportunity to complete this project. I would also like to thank my project guide and faculty members for their valuable guidance, support, and encouragement throughout the development of my project titled **"Design and Implementation of a Comprehensive Literary Sanctuary and Second-Hand Book Marketplace (Bookdrop)."**
+
+I am thankful to my friends and classmates who helped me with their suggestions and support during the completion of this project. Finally, I would like to express my heartfelt thanks to my family for their continuous encouragement and support throughout my studies.
+
+---
+
 Abstract
 The Bookdrop platform represents a very modern and innovative approach to the digital book market, moving far beyond the simple buying and selling features found in traditional e-commerce sites. Launched as a comprehensive literary sanctuary in April 2026, this full-stack application provides a unique space where readers can not only purchase new books but also trade pre-loved copies through a secure peer-to-peer marketplace. What truly sets this platform apart is the pioneering "Book Journey" provenance system, which uses a relational database to track the physical history of every second-hand book, including its previous owners, the cities it has travelled through, and personal notes left by readers along the way. The technical foundation of Bookdrop is built using the latest React 19 framework with TypeScript for the frontend, while the backend is powered by a robust Node.js and Express.js server connected to a highly organized MySQL database. With features like a Tinder-style swipe discovery engine, interactive world maps for geographic exploration, and a "Time Machine" for browsing literary eras, Bookdrop offers a deeply engaging and gamified experience. This report details the complete development lifecycle of the platform, explaining how we integrated fifty-five API endpoints and twenty-three unique pages to create a secure, scalable, and community-driven hub for bibliophiles everywhere.
 CHAPTER 1: INTRODUCTION
@@ -1280,4 +1373,38 @@ The following references are formatted in accordance with the IEEE citation stan
 [19] Microsoft Corporation, "TypeScript: JavaScript with Syntax for Types," TypeScript Documentation, 2024. [Online]. Available: https://www.typescriptlang.org/docs/. [Accessed: Apr. 5, 2025].
 
 [20] Tailwind Labs, Inc., "Tailwind CSS v4 — A utility-first CSS framework," Tailwind CSS Documentation, 2025. [Online]. Available: https://tailwindcss.com/docs. [Accessed: Apr. 6, 2025].
+
+**Similar Platforms**
+
+[21] PangoBooks, Inc., "PangoBooks — Buy and Sell Used Books," PangoBooks, 2024. [Online]. Available: https://www.pangobooks.com. [Accessed: Apr. 10, 2025].
+
+[22] ThriftBooks Global, LLC, "ThriftBooks — Spend Less. Read More.," ThriftBooks, 2024. [Online]. Available: https://www.thriftbooks.com. [Accessed: Apr. 10, 2025].
+
+[23] Biblio, Inc., "Biblio — Uncommonly Good Books Found Here," Biblio, 2024. [Online]. Available: https://www.biblio.com. [Accessed: Apr. 10, 2025].
+
+[24] BookScouter, Inc., "BookScouter — Compare Book Buyback Prices," BookScouter, 2024. [Online]. Available: https://bookscouter.com. [Accessed: Apr. 10, 2025].
+
+[25] LibraryThing, "LibraryThing — Catalog Your Books Online," LibraryThing, 2024. [Online]. Available: https://www.librarything.com. [Accessed: Apr. 11, 2025].
+
+[26] Internet Archive, "Open Library — An Open, Editable Library Catalog," Open Library, 2024. [Online]. Available: https://openlibrary.org. [Accessed: Apr. 11, 2025].
+
+**IIIT and Academic Research Papers**
+
+[27] R. Kanagala and V. R. Badri Prasad, "A collaborative filtering-based recommendation system for e-commerce using implicit feedback," in Proc. IEEE 2nd Int. Conf. on Computational Intelligence and Communication Technology (CICT), Ghaziabad, India, 2016, pp. 500-504.
+
+[28] P. Mathew, B. Kuriakose, and V. Hegde, "Book recommendation system through content-based and collaborative filtering method," in Proc. IEEE Int. Conf. on Data Mining and Advanced Computing (SAPIENCE), Ernakulam, India, 2016, pp. 169-173.
+
+[29] S. K. Raghuwanshi and R. K. Pateriya, "Collaborative filtering techniques in recommendation systems," in Proc. IEEE Int. Conf. on Data, Engineering and Applications (IDEA), Bhopal, India, 2019, pp. 11-17.
+
+[30] K. Roopashree and M. Srujan Raju, "Impact of gamification on e-commerce user engagement and retention," in Proc. IEEE 3rd Int. Conf. on Inventive Research in Computing Applications (ICIRCA), Coimbatore, India, 2021, pp. 920-925.
+
+[31] N. Xi and J. Hamari, "Does gamification affect brand engagement and equity? A study in online brand communities," Journal of Business Research, vol. 109, pp. 449-460, 2020.
+
+[32] A. Jain, S. Jain, and P. K. Shukla, "A novel approach for gesture-based swipe interfaces in mobile commerce: Enhancing user discovery experience," in Proc. IEEE 7th Int. Conf. for Convergence in Technology (I2CT), Pune, India, 2022, pp. 1-6.
+
+[33] V. K. Singh and R. P. Mahapatra, "Analysis of circular economy platforms and user trust in second-hand digital marketplaces," in Proc. IEEE Int. Conf. on Sustainable Computing and Data Communication Systems (ICSCDS), Erode, India, 2023, pp. 1542-1547.
+
+[34] M. S. Yadav, P. Kamboj, and D. K. Vishwakarma, "Deep hybrid recommendation engine for online book stores using sentiment analysis of user reviews," in Proc. IEEE 6th Int. Conf. on Computing Methodologies and Communication (ICCMC), Erode, India, 2022, pp. 736-742.
+
+[35] S. Krishnan, K. S. Babu, and S. K. Jena, "Provenance-aware data governance for multi-owner digital marketplaces," in Proc. IEEE 16th India Council Int. Conf. (INDICON), Rajkot, India, 2019, pp. 1-4.
 
