@@ -4,10 +4,33 @@ require("dotenv").config();
 
 const app = express();
 
-// CORS Configuration - Restricted to Vercel production origin
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:8080',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000',
+  'https://bookdrop-delta.vercel.app'
+];
+
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+  allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ""));
+}
+
 app.use(
   cors({
-    origin: ["https://bookdrop-delta.vercel.app", "http://localhost:5173"],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      const isAllowed = allowedOrigins.indexOf(origin) !== -1 || 
+                        allowedOrigins.some(o => origin.startsWith(o));
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        console.warn(`[CORS Warning] Origin "${origin}" not allowed by CORS`);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -35,6 +58,11 @@ const reviewRoutes = require("./routes/reviews");
 const adminRoutes = require("./routes/admin");
 const refundRoutes = require("./routes/refunds");
 const courseRoutes = require("./routes/courses");
+
+// Health check routes
+app.get('/api/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+app.get('/', (_req, res) => res.json({ status: 'ok', message: 'Bookdrop API is running successfully!' }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/addresses", addressRoutes);
